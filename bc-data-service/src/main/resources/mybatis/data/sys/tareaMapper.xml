@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="AREA">
+	<select id="query" resultType="map" parameterType="map">
+		SELECT
+			id as "id",  
+			pid as "pid",  
+			code as "code",  
+			tempPcode as "tempPcode",  
+			nameCn as "nameCn",  
+			nameEn as "nameEn",  
+			displayOrder as "displayOrder",  
+			status as "status",  
+			level as "level",  
+			privinceArea as "privinceArea",  
+			shortName as "shortName" 
+		FROM t_area
+		<where>
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="pid != null and pid != ''">
+				and pid = #{pid}
+			</if>
+			<if test="code != null and code != ''">
+				and code = #{code}
+			</if>
+			<if test="tempPcode != null and tempPcode != ''">
+				and tempPcode = #{tempPcode}
+			</if>
+			<if test="nameCn != null and nameCn != ''">
+				and (nameCn like CONCAT('%',#{nameCn},'%' ) or code like CONCAT(#{nameCn},'%' ) )
+			</if>
+			<if test="nameEn != null and nameEn != ''">
+				and nameEn = #{nameEn}
+			</if>
+			<if test="displayOrder != null and displayOrder != ''">
+				and displayOrder = #{displayOrder}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="level != null and level != ''">
+				and level = #{level}
+			</if>
+			<if test="privinceArea != null and privinceArea != ''">
+				and privinceArea = #{privinceArea}
+			</if>
+			<if test="shortName != null and shortName != ''">
+				and shortName = #{shortName}
+			</if>
+		</where>
+		<if test="orderSql != null and orderSql!='' "> 
+			ORDER by ${orderSql}
+		</if>
+	</select>
+
+	<select id="count" resultType="int" parameterType="map">
+		SELECT COUNT(*) FROM t_area 
+		<where>
+		<if test="id != null and id != ''">
+			and id = #{id}
+		</if>
+		<if test="pid != null and pid != ''">
+			and pid = #{pid}
+		</if>
+		<if test="code != null and code != ''">
+			and code = #{code}
+		</if>
+		<if test="tempPcode != null and tempPcode != ''">
+			and tempPcode = #{tempPcode}
+		</if>
+		<if test="nameCn != null and nameCn != ''">
+			and (nameCn like CONCAT('%',#{nameCn},'%' ) or code like CONCAT(#{nameCn},'%' ) )
+		</if>
+		<if test="nameEn != null and nameEn != ''">
+			and nameEn = #{nameEn}
+		</if>
+		<if test="displayOrder != null and displayOrder != ''">
+			and displayOrder = #{displayOrder}
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+		<if test="level != null and level != ''">
+			and level = #{level}
+		</if>
+		<if test="privinceArea != null and privinceArea != ''">
+			and privinceArea = #{privinceArea}
+		</if>
+		<if test="shortName != null and shortName != ''">
+			and shortName = #{shortName}
+		</if>
+		</where>
+	</select>
+	
+	<!-- 前端查询省份城市 -->
+	<select id="queryAreaShow" resultType="map" parameterType="map"> 
+		SELECT
+			pid as "pid",
+			t.`code` as "code",
+			t.nameCn as "nameCn",
+			t.nameEn as "nameEn",
+			t.shortName as "shortName",
+			t.tempPcode as "tempPcode"
+		FROM
+			t_area t
+		ORDER BY t.code
+	</select>
+	
+	<select id="querySelectTree" resultType="map" parameterType="map">
+		SELECT
+			CONCAT('r-', t.id) AS "codeId",
+			t.`code` as "code",
+			t.nameCn as "name",
+			t.nameCn as "nameCn",
+			t.shortName as "shortName",
+			t.tempPcode as "parentId",
+	        'false' AS "checked",
+			'false' AS "open"
+		FROM
+			t_area t
+		ORDER BY t.code
+	</select>
+	
+	<select id="queryTreeArea" resultType="map" parameterType="map">
+		SELECT
+			CONCAT('r-', t.id) AS "codeId",
+			t.`code` as "code",
+			t.nameCn as "name",
+			t.nameCn as "nameCn",
+			t.shortName as "shortName",
+			t.tempPcode as "parentId",
+	       (CASE WHEN t1.cityCode IS NULL THEN
+					'false'
+				ELSE
+					'true'
+				END) AS "checked",
+			(CASE WHEN t1.cityCode IS NULL THEN
+					'false'
+				ELSE
+					'true'
+				END) AS "open"
+		FROM
+			t_area t
+		LEFT JOIN t_loan_city t1 ON t.CODE = t1.cityCode and t1.loanId = #{loanId} 
+		ORDER BY t.code
+	</select>
+	
+	
+	<select id="queryProvice" resultType="map" parameterType="map">
+		select * from t_province
+	</select>
+	
+	<select id="queryAllInfo" resultType="map" parameterType="map">
+		select 
+			t.provinceName,
+			t1.cityName,
+			t1.cityEn,
+			t1.cityCode, 
+			GROUP_CONCAT(t2.districtName) as 'districtNames'
+		from t_province t JOIN t_city t1 on t.provinceID = t1.provinceId
+		JOIN t_district t2  on t1.cityId = t2.cityId
+		group by t.provinceID,t1.cityId
+		ORDER BY t1.cityCode
+	</select>
+	
+	<select id="queryGroupCity" resultType="map" parameterType="map">
+		select SUBSTR(t.cityEn,1,1) cityEn,GROUP_CONCAT(DISTINCT(t.cityName)) cityName from t_city t 
+			GROUP BY SUBSTR(t.cityEn,1,1)
+			ORDER BY SUBSTR(t.cityEn,1,1),t.cityCode
+	</select>
+	
+	<select id="queryGroupDistrict" resultType="map" parameterType="map">
+		select t.cityId,t1.cityName,t1.cityEn,t1.cityCode, GROUP_CONCAT(t.districtName) areas  from t_district t JOIN t_city t1 on t.cityId = t1.cityId
+	<where>	
+		<if test="cityName != null and cityName != ''">
+			and t1.cityName = #{cityName}
+		</if>
+		<if test="cityCode != null and cityCode != ''">
+			and t1.cityCode = #{cityCode}
+		</if>
+	</where>	
+		GROUP BY t.cityId
+		ORDER BY t.cityId
+	</select>	
+	
+	<select id="queryProvinceByCity" parameterType="map" resultType="map">
+	SELECT nameCn 
+	FROM t_area 
+	WHERE 
+	tempPcode = (SELECT tempPcode from t_area where nameCn = #{cityName} and `level` = 2 LIMIT 1) 
+	AND `level` = 1;
+	</select>
+	
+</mapper>

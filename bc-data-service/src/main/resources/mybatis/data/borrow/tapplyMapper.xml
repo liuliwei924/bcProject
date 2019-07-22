@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="APPLY">
+    
+    <sql id="querySql">
+   		   	<if test="applyId != null and applyId != ''">
+			  and applyId = #{applyId}
+			 </if>
+			 <if test="uid != null and uid != ''">
+			  and uid = #{uid}
+			 </if>
+			<if test="borrowApplyId != null and borrowApplyId != ''">
+				and borrowApplyId = #{borrowApplyId}
+			</if>
+			<if test="applyName != null and applyName != ''">
+				and applyName = #{applyName}
+			</if>
+			<if test="telephone != null and telephone != ''">
+				and telephone = #{telephone}
+			</if>
+			<if test="cityName != null and cityName != ''">
+				and cityName = #{cityName}
+			</if>
+			<if test="haveDetail != null and haveDetail != ''">
+				and haveDetail = #{haveDetail}
+			</if>
+			<if test="channelCode != null and channelCode != ''">
+				and channelCode = #{channelCode}
+			</if>
+			<if test="channelDetail != null and channelDetail != ''">
+				and channelDetail = #{channelDetail}
+			</if>
+			<if test="applyType != null and applyType != ''">
+				and applyType = #{applyType}
+			</if>
+			<if test="isAgain != null and isAgain != ''">
+				and isAgain = #{isAgain}
+			</if>
+			<if test="isRepeat != null and isRepeat != ''">
+				and isRepeat = #{isRepeat}
+			</if>
+			<if test="status != null and status != ''">
+				and status = #{status}
+			</if>
+			<if test="inStatus != null and inStatus != ''">
+				and status in(${inStatus})
+			</if>
+			<if test="beginTranferTime != null">
+				and tranferTime <![CDATA[>=]]> #{beginTranferTime}
+			</if>
+    </sql>
+    
+	<select id="query" resultType="map" parameterType="map">
+		SELECT
+			applyId ,
+			uid,
+			borrowApplyId ,  
+			applyName ,  
+			telephone ,  
+			applyAmount ,  
+			cityName ,  
+			cityArea ,  
+			haveDetail ,  
+			pageReferer ,  
+			channelCode ,  
+			channelDetail ,  
+			applyType ,  
+			identifyNo ,  
+			education ,  
+			workType ,  
+			isRepeat,
+			cmpType ,  
+			creditType ,  
+			pubAmount ,  
+			caseAmount ,  
+			totalAmount ,  
+			manageYear ,  
+			wagesType ,  
+			income , 
+			iszhapian, 
+			fundType ,  
+			socialType ,  
+			houseType ,  
+			carType ,  
+			haveWeiLi ,  
+			zimaScore ,  
+			insurType ,  
+			insurMonth ,  
+			insurMonthAmt ,  
+			DATE_FORMAT(applyTime,'%Y-%m-%d %H:%i:%s') as "applyTime",
+			DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s') as "updateTime",
+			DATE_FORMAT(tranferTime,'%Y-%m-%d %H:%i:%s') as "tranferTime",
+			DATE_FORMAT(tranTime,'%Y-%m-%d %H:%i:%s') as "tranTime",
+			isAgain ,  
+			status ,  
+			age ,  
+			sex ,  
+			carMonthPay ,  
+			houseMonthPay ,  
+			insure ,  
+			loanDeadline ,  
+			insurPayType ,  
+			fundMonth ,  
+			socialMonth ,  
+			houseVal ,  
+			carPrice ,  
+			hasLicense ,  
+			applyIp ,  
+			jobMonth ,  
+			housePlace ,  
+			carLocal ,  
+			carYears ,  
+			myLicense ,  
+			myLoanHouse ,  
+			houseMonth ,  
+			carMonth ,  
+			pageDetail ,  
+			errMsg ,  
+			DATE_FORMAT(birthday,'%Y-%m-%d'),
+			userAgent  
+		FROM t_apply
+		<where>
+			<include refid="querySql"/>
+		</where>
+		<if test="orderSql != null and orderSql!='' "> 
+			ORDER by ${orderSql}
+		</if>
+		<if test="limitSize != null and limitSize != ''">
+				limit 0,#{limitSize}
+		</if>
+	</select>
+
+	<select id="count" resultType="int" parameterType="map">
+		SELECT COUNT(*) FROM t_apply 
+		<where>
+		<include refid="querySql"/>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="map">
+		<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="applyId">
+		   SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO t_apply (
+			borrowApplyId,
+			uid,
+			applyName,
+			telephone,
+			applyAmount,
+			cityName,
+			cityArea,
+			haveDetail,
+			pageReferer,
+			channelCode,
+			channelDetail,
+			applyType,
+			identifyNo,
+			education,
+			workType,
+			cmpType,
+			creditType,
+			pubAmount,
+			caseAmount,
+			totalAmount,
+			manageYear,
+			wagesType,
+			income,
+			fundType,
+			socialType,
+			houseType,
+			carType,
+			haveWeiLi,
+			zimaScore,
+			insurType,
+			insurMonth,
+			insurMonthAmt,
+			applyTime,
+			tranferTime,
+			isAgain,
+			status,
+			age,
+			sex,
+			carMonthPay,
+			houseMonthPay,
+			insure,
+			loanDeadline,
+			insurPayType,
+			fundMonth,
+			socialMonth,
+			houseVal,
+			carPrice,
+			hasLicense,
+			applyIp,
+			jobMonth,
+			housePlace,
+			carLocal,
+			carYears,
+			myLicense,
+			myLoanHouse,
+			houseMonth,
+			carMonth,
+			pageDetail,
+			errMsg,
+			birthday,
+			userAgent,
+			isRepeat,
+			iszhapian
+		)
+		VALUES ( 
+			#{borrowApplyId, jdbcType=BIGINT,typeHandler=NumberHandler}, 
+			#{uid, jdbcType=VARCHAR}, 
+			#{applyName, jdbcType=VARCHAR}, 
+			#{telephone, jdbcType=CHAR}, 
+			#{applyAmount, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			#{cityName, jdbcType=VARCHAR}, 
+			#{cityArea, jdbcType=VARCHAR}, 
+			<if test="haveDetail !=null ">
+			#{haveDetail, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="haveDetail ==null ">
+			0 ,
+			</if>
+			#{pageReferer, jdbcType=VARCHAR}, 
+			#{channelCode, jdbcType=VARCHAR}, 
+			#{channelDetail, jdbcType=VARCHAR}, 
+			<if test="applyType !=null ">
+			#{applyType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="applyType ==null ">
+			2 ,
+			</if>
+			#{identifyNo, jdbcType=VARCHAR}, 
+			#{education, jdbcType=VARCHAR}, 
+			#{workType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			<if test="cmpType !=null ">
+			#{cmpType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="cmpType ==null ">
+			0 ,
+			</if>
+			#{creditType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			#{pubAmount, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			#{caseAmount, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			#{totalAmount, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			#{manageYear, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			#{wagesType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			#{income, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			<if test="fundType !=null ">
+			#{fundType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="fundType ==null ">
+			0 ,
+			</if>
+			<if test="socialType !=null ">
+			#{socialType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="socialType ==null ">
+			0 ,
+			</if>
+			<if test="houseType !=null ">
+			#{houseType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="houseType ==null ">
+			2 ,
+			</if>
+			<if test="carType !=null ">
+			#{carType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="carType ==null ">
+			2 ,
+			</if>
+			<if test="haveWeiLi !=null ">
+			#{haveWeiLi, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			</if>
+			<if test="haveWeiLi ==null ">
+			-1.00 ,
+			</if>
+			<if test="zimaScore !=null ">
+			#{zimaScore, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			</if>
+			<if test="zimaScore ==null ">
+			0.00 ,
+			</if>
+			<if test="insurType !=null ">
+			#{insurType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="insurType ==null ">
+			0 ,
+			</if>
+			<if test="insurMonth !=null ">
+			#{insurMonth, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="insurMonth ==null ">
+			0 ,
+			</if>
+			<if test="insurMonthAmt !=null ">
+			#{insurMonthAmt, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="insurMonthAmt ==null ">
+			0 ,
+			</if>
+			#{applyTime, jdbcType=TIMESTAMP,typeHandler=DateHandler}, 
+			#{tranferTime, jdbcType=TIMESTAMP,typeHandler=DateHandler}, 
+			<if test="isAgain !=null ">
+			#{isAgain, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="isAgain ==null ">
+			0 ,
+			</if>
+			<if test="status !=null ">
+			#{status, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="status ==null ">
+			0 ,
+			</if>
+			#{age, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			#{sex, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			<if test="carMonthPay !=null ">
+			#{carMonthPay, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			</if>
+			<if test="carMonthPay ==null ">
+			0.00 ,
+			</if>
+			<if test="houseMonthPay !=null ">
+			#{houseMonthPay, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			</if>
+			<if test="houseMonthPay ==null ">
+			0.00 ,
+			</if>
+			<if test="insure !=null ">
+			#{insure, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="insure ==null ">
+			0 ,
+			</if>
+			#{loanDeadline, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			#{insurPayType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			<if test="fundMonth !=null ">
+			#{fundMonth, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="fundMonth ==null ">
+			0 ,
+			</if>
+			<if test="socialMonth !=null ">
+			#{socialMonth, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="socialMonth ==null ">
+			0 ,
+			</if>
+			<if test="houseVal !=null ">
+			#{houseVal, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			</if>
+			<if test="houseVal ==null ">
+			0.00 ,
+			</if>
+			<if test="carPrice !=null ">
+			#{carPrice, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
+			</if>
+			<if test="carPrice ==null ">
+			0.00 ,
+			</if>
+			<if test="hasLicense !=null ">
+			#{hasLicense, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="hasLicense ==null ">
+			0 ,
+			</if>
+			#{applyIp, jdbcType=VARCHAR}, 
+			#{jobMonth, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			<if test="housePlace !=null ">
+			#{housePlace, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="housePlace ==null ">
+			1 ,
+			</if>
+			<if test="carLocal !=null ">
+			#{carLocal, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="carLocal ==null ">
+			0 ,
+			</if>
+			<if test="carYears !=null ">
+			#{carYears, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="carYears ==null ">
+			0 ,
+			</if>
+			<if test="myLicense !=null ">
+			#{myLicense, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="myLicense ==null ">
+			0 ,
+			</if>
+			<if test="myLoanHouse !=null ">
+			#{myLoanHouse, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="myLoanHouse ==null ">
+			0 ,
+			</if>
+			<if test="houseMonth !=null ">
+			#{houseMonth, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="houseMonth ==null ">
+			0 ,
+			</if>
+			<if test="carMonth !=null ">
+			#{carMonth, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="carMonth ==null ">
+			0 ,
+			</if>
+			#{pageDetail, jdbcType=VARCHAR}, 
+			#{errMsg, jdbcType=VARCHAR}, 
+			#{birthday, jdbcType=DATE,typeHandler=DateHandler}, 
+			#{userAgent, jdbcType=NVARCHAR},
+			<if test="isRepeat == null">
+			0,
+			</if>
+			<if test="isRepeat != null">
+			#{isRepeat, jdbcType=INTEGER,typeHandler=NumberHandler},
+			</if>
+			<if test="iszhapian == null">
+			0
+			</if>
+			<if test="iszhapian != null">
+			#{iszhapian, jdbcType=INTEGER,typeHandler=NumberHandler}
+			</if>
+		)
+	</insert>
+	<delete id="delete" parameterType="map">
+		DELETE FROM t_apply 
+		<where> 
+			applyId = #{applyId}
+		</where>
+	</delete>
+	<update id="update" parameterType="map">
+		UPDATE t_apply  
+		<set>
+			<if test="borrowApplyId != null">
+				borrowApplyId = #{borrowApplyId, jdbcType=BIGINT,typeHandler=NumberHandler},  
+			</if>
+			<if test="applyName != null">
+				applyName = #{applyName, jdbcType=VARCHAR},  
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone, jdbcType=CHAR},  
+			</if>
+			<if test="applyAmount != null">
+				applyAmount = #{applyAmount, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="cityName != null">
+				cityName = #{cityName, jdbcType=VARCHAR},  
+			</if>
+			<if test="cityArea != null">
+				cityArea = #{cityArea, jdbcType=VARCHAR},  
+			</if>
+			<if test="nullArea != null and nullArea == 1">
+				cityArea =null,  
+			</if>
+			<if test="haveDetail != null">
+				haveDetail = #{haveDetail, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="isRepeat != null">
+				isRepeat = #{isRepeat, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="applyType != null">
+				applyType = #{applyType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="identifyNo != null">
+				identifyNo = #{identifyNo, jdbcType=VARCHAR},  
+			</if>
+			<if test="education != null">
+				education = #{education, jdbcType=VARCHAR},  
+			</if>
+			<if test="workType != null">
+				workType = #{workType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="cmpType != null">
+				cmpType = #{cmpType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="creditType != null">
+				creditType = #{creditType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="pubAmount != null">
+				pubAmount = #{pubAmount, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="caseAmount != null">
+				caseAmount = #{caseAmount, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="totalAmount != null">
+				totalAmount = #{totalAmount, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="manageYear != null">
+				manageYear = #{manageYear, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="wagesType != null">
+				wagesType = #{wagesType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="income != null">
+				income = #{income, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="fundType != null">
+				fundType = #{fundType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="socialType != null">
+				socialType = #{socialType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="houseType != null">
+				houseType = #{houseType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="carType != null">
+				carType = #{carType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="haveWeiLi != null">
+				haveWeiLi = #{haveWeiLi, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="zimaScore != null">
+				zimaScore = #{zimaScore, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="insurType != null">
+				insurType = #{insurType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="insurMonth != null">
+				insurMonth = #{insurMonth, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="insurMonthAmt != null">
+				insurMonthAmt = #{insurMonthAmt, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="applyTime != null">
+				applyTime = #{applyTime, jdbcType=TIMESTAMP,typeHandler=DateHandler},  
+			</if>
+			<if test="updateTime != null">
+				updateTime = #{updateTime, jdbcType=TIMESTAMP,typeHandler=DateHandler},  
+			</if>
+			<if test="tranTime != null">
+				tranTime = #{tranTime, jdbcType=TIMESTAMP,typeHandler=DateHandler},  
+			</if>
+			<if test="tranferTime != null">
+				tranferTime = #{tranferTime, jdbcType=TIMESTAMP,typeHandler=DateHandler},  
+			</if>
+			<if test="isAgain != null">
+				isAgain = #{isAgain, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="status != null">
+				status = #{status, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="age != null">
+				age = #{age, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="sex != null">
+				sex = #{sex, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="carMonthPay != null">
+				carMonthPay = #{carMonthPay, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="houseMonthPay != null">
+				houseMonthPay = #{houseMonthPay, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="insure != null">
+				insure = #{insure, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="loanDeadline != null">
+				loanDeadline = #{loanDeadline, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="insurPayType != null">
+				insurPayType = #{insurPayType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="fundMonth != null">
+				fundMonth = #{fundMonth, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="socialMonth != null">
+				socialMonth = #{socialMonth, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="houseVal != null">
+				houseVal = #{houseVal, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="carPrice != null">
+				carPrice = #{carPrice, jdbcType=NUMERIC,typeHandler=NumberHandler},  
+			</if>
+			<if test="hasLicense != null">
+				hasLicense = #{hasLicense, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="applyIp != null">
+				applyIp = #{applyIp, jdbcType=VARCHAR},  
+			</if>
+			<if test="jobMonth != null">
+				jobMonth = #{jobMonth, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="housePlace != null">
+				housePlace = #{housePlace, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="carLocal != null">
+				carLocal = #{carLocal, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="carYears != null">
+				carYears = #{carYears, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="myLicense != null">
+				myLicense = #{myLicense, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="myLoanHouse != null">
+				myLoanHouse = #{myLoanHouse, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="houseMonth != null">
+				houseMonth = #{houseMonth, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="carMonth != null">
+				carMonth = #{carMonth, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="pageDetail != null">
+				pageDetail = #{pageDetail, jdbcType=VARCHAR},  
+			</if>
+			<if test="errMsg != null">
+				errMsg = #{errMsg, jdbcType=VARCHAR},  
+			</if>
+			<if test="clearErrMsg != null">
+				errMsg = NULL,  
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday, jdbcType=DATE,typeHandler=DateHandler},  
+			</if>
+			<if test="userAgent != null">
+				userAgent = #{userAgent, jdbcType=NVARCHAR}
+			</if>
+		</set>
+		<where>
+		     <choose>
+		       <when test="uid != null and uid !='' ">
+		         uid = #{uid}
+		       </when>
+		       <otherwise>
+		         applyId = #{applyId}
+		       </otherwise>
+		     </choose>
+			
+		</where>
+	</update>
+	
+	<select id="queryApplyStatus" parameterType="map" resultType="map">
+		select applyId, uid, status,(SELECT count(applyId) from t_apply where telephone = #{telephone}) as count, applyTime 
+		from t_apply where telephone = #{telephone} 
+		ORDER BY applyId DESC LIMIT 0,1
+	</select>
+	
+	<select id="queryBaseByUid" parameterType="map" resultType="map">
+		SELECT
+			applyAmount,
+			houseType,
+			houseMonthPay,
+			myLoanHouse,
+			houseMonth,
+			houseVal,
+			housePlace,
+			carType,
+			grade,
+			carLocal,
+			carMonth,
+			carPrice, 
+			carMonthPay,
+			carYears,
+			workType,
+			myLicense,
+			workType,
+			wagesType,
+			jobMonth,
+			income,
+			caseAmount,
+			hasLicense,
+			socialType,
+			fundType,
+			insurType,
+			insurPayType,
+			insurMonth,
+			insurMonthAmt,
+			if(haveWeiLi=-1,0,haveWeiLi) as 'haveWeiLi',
+			zimaScore,
+			sex,
+			age,
+			birthday,
+			identifyNo,
+			cmpType
+		FROM t_apply
+		WHERE
+			uid = #{uid}
+	</select>
+	
+	<select id="isOldUser" parameterType="map" resultType="map">
+	SELECT
+		IF (
+			workType IS NULL
+			and houseType is null
+			AND carType is null,
+			0,
+			1
+			) AS 'isLoan'
+	FROM
+		t_apply
+	<where>
+		<if test="uid != null and uid != ''">
+		and uid = #{uid}
+		</if>
+		<if test="applyId != null and applyId != ''">
+		and applyId = #{applyId}
+		</if>
+	</where>
+	</select>
+</mapper>

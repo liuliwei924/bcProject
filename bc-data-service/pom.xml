@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+        <groupId>org.bc</groupId>
+        <artifactId>base</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    
+  	<groupId>org.bc.service</groupId>
+  	<artifactId>bc-data-service</artifactId>
+	<name>bc-data-service</name>
+	<packaging>jar</packaging>
+
+  <dependencies>
+		<dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+			<groupId>org.bc.util</groupId>
+			<artifactId>bc-admin-util</artifactId>
+			<version>${bc-admin-util.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.llw</groupId>
+			<artifactId>llw-dao</artifactId>
+			<version>${core.version}</version>
+		</dependency>
+	</dependencies>
+	
+	  <build>
+        <plugins>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+            	<artifactId>maven-compiler-plugin</artifactId>
+            </plugin> 
+        </plugins>
+    </build>
+</project>

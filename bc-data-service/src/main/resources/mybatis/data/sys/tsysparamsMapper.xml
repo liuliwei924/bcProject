@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="SYSPARAMS">
+    
+	<select id="query" resultType="map" parameterType="map">
+		SELECT
+			paramCode ,
+			paramName ,  
+			paramValue ,  
+			updateBy ,  
+			DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s') as "updateTime",
+			DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s') as "createTime"
+		FROM t_sys_params
+		<where>
+			<if test="paramCode != null and paramCode != ''">
+			  and paramCode = #{paramCode}
+			 </if>
+			<if test="paramName != null and paramName != ''">
+				and paramName like '${paramName}'
+			</if>
+			
+			<if test="likeParam != null and likeParam != ''">
+				and ( paramName like CONCAT ('%',#{likeParam},'%') or paramCode  like CONCAT ('%',#{likeParam},'%') or paramValue  like CONCAT ('%',#{likeParam},'%') )
+			</if>
+			
+			<if test="paramValue != null and paramValue != ''">
+				and paramValue = #{paramValue}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				and updateBy = #{updateBy}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				and updateTime = #{updateTime}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and createTime = #{createTime}
+			</if>
+		</where>
+		ORDER by createTime DESC
+	</select>
+
+	<select id="count" resultType="int" parameterType="map">
+		SELECT COUNT(*) FROM t_sys_params 
+		<where>
+		<if test="paramCode != null and paramCode != ''">
+		    and paramCode = #{paramCode}
+		 </if>
+		<if test="paramName != null and paramName != ''">
+			and paramName like '${paramName}'
+		</if>
+	
+		<if test="likeParam != null and likeParam != ''">
+			and ( paramName like CONCAT ('%',#{likeParam},'%') or paramCode  like CONCAT ('%',#{likeParam},'%') or paramValue  like CONCAT ('%',#{likeParam},'%') )
+		</if>
+		
+		<if test="paramValue != null and paramValue != ''">
+			and paramValue = #{paramValue}
+		</if>
+		<if test="updateBy != null and updateBy != ''">
+			and updateBy = #{updateBy}
+		</if>
+		<if test="updateTime != null and updateTime != ''">
+			and updateTime = #{updateTime}
+		</if>
+		<if test="createTime != null and createTime != ''">
+			and createTime = #{createTime}
+		</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="map">
+	
+		INSERT INTO t_sys_params (
+			paramCode,
+			paramName,
+			paramValue,
+			updateBy,
+			updateTime,
+			createTime
+		)
+		VALUES (
+			#{paramCode, jdbcType=VARCHAR},  
+			#{paramName, jdbcType=VARCHAR}, 
+			#{paramValue, jdbcType=VARCHAR}, 
+			#{updateBy, jdbcType=VARCHAR}, 
+			#{updateTime, jdbcType=TIMESTAMP,typeHandler=DateHandler}, 
+			#{createTime, jdbcType=TIMESTAMP,typeHandler=DateHandler}
+		)
+	</insert>
+	<delete id="delete" parameterType="map">
+		DELETE FROM t_sys_params 
+		<where> 
+			paramCode = #{paramCode}
+		</where>
+	</delete>
+	<update id="update" parameterType="map">
+		UPDATE t_sys_params  
+		<set>
+			<if test="paramName != null">
+				paramName = #{paramName, jdbcType=VARCHAR},  
+			</if>
+			<if test="paramValue != null">
+				paramValue = #{paramValue, jdbcType=VARCHAR},  
+			</if>
+			<if test="updateBy != null">
+				updateBy = #{updateBy, jdbcType=VARCHAR},  
+			</if>
+			<if test="updateTime != null">
+				updateTime = #{updateTime, jdbcType=TIMESTAMP,typeHandler=DateHandler},  
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime, jdbcType=TIMESTAMP,typeHandler=DateHandler}
+			</if>
+		</set>
+		<where>
+			  paramCode = #{paramCode}
+		</where>
+	</update>
+</mapper>

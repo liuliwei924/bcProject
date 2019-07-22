@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+        <groupId>org.bc</groupId>
+        <artifactId>base</artifactId>
+        <version>1.0.0</version>
+    </parent>
+  
+  <groupId>org.bc.web</groupId>
+  <artifactId>bc-dai-web</artifactId>
+  <name>bc-dai-web</name>
+
+  <dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+		<groupId>org.llw</groupId>
+			<artifactId>llw-web-util</artifactId>
+			<version>${core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bc.util</groupId>
+			<artifactId>bc-admin-util</artifactId>
+			<version>${bc-admin-util.version}</version>
+		</dependency>
+		<dependency>
+				<groupId>org.xxy.admin</groupId>
+				<artifactId>message-util</artifactId>
+				<version>${core.version}</version>
+		</dependency>
+		<dependency>
+				<groupId>org.bc.service</groupId>
+				<artifactId>bc-data-service</artifactId>
+				<version>${bc-data-service.version}</version>
+		</dependency>
+	</dependencies>
+	
+	<build>
+	   <plugins>
+	      <plugin>
+	         <!-- The plugin rewrites your manifest -->
+	         <groupId>org.springframework.boot</groupId>
+	         <artifactId>spring-boot-maven-plugin</artifactId>
+	         <executions>
+	            <execution>
+	               <goals>
+	                  <goal>repackage</goal><!--可以把依赖的包都打包到生成的Jar包中 -->
+	               </goals>
+	            </execution>
+	         </executions>
+	      </plugin>
+	   </plugins>
+	</build>
+	
+</project>
