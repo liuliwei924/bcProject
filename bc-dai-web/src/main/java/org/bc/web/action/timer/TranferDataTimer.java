@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.bc.admin.util.borrow.BorrowChannelUtil;
 import org.bc.admin.util.constant.BorrowConstant;
 import org.bc.admin.util.constant.SysParamConstont;
 import org.bc.admin.util.sys.ServiceKey;
@@ -71,10 +72,13 @@ public class TranferDataTimer implements Runnable {
 				int failTotal  = 0;
 				int total  = result.getRows().size();
 				long startTime = System.currentTimeMillis();
+				Map<String,Object> paramMap = null;
+				Map<String,Object> retMap = null;
 				
 				for(Map<String,Object> tranferMap : result.getRows()) {
 					Object applyId = tranferMap.get("applyId");
-					Map<String,Object> paramMap = new LinkedHashMap<String,Object>();
+					
+					paramMap = new LinkedHashMap<String,Object>();
 					String channelCode = StringUtil.getString(tranferMap.get("channelCode"));
 					if(StringUtils.isEmpty(channelCode)) {
 						paramMap.put("applyId", applyId);
@@ -86,11 +90,13 @@ public class TranferDataTimer implements Runnable {
 						continue;
 					}
 					
-					Map<String,Object> retMap = null;
+					
 					try {
 						String req_url = Req_BASE_URL + channelCode;
 						
-						String merchId = channelCode;
+						Map<String,Object> channelMap = BorrowChannelUtil.getChannelByCode(channelCode);
+						
+						String merchId = StringUtil.getString(channelMap.get("merchId"));
 						String telephone = tranferMap.get("telephone").toString();
 						String time = DateTimeUtil.toStringByParttern(new Date(), 
 								DateTimeUtil.DATE_PATTERNYYYYMMDDHHMMSSSSS);

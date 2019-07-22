@@ -223,7 +223,12 @@
 			0 ,
 			</if>
 			#{pageReferer, jdbcType=VARCHAR}, 
-			#{channelCode, jdbcType=VARCHAR}, 
+			<if test="channelCode != null and channelCode != ''">
+			#{channelCode, jdbcType=VARCHAR},
+			</if>
+			<if test="channelCode == null">
+			(SELECT n1.channelCode FROM t_borrow_channel n1 WHERE locate(n1.channelCode,#{channelDetail})=1 LIMIT 1),
+			</if>
 			#{channelDetail, jdbcType=VARCHAR}, 
 			<if test="applyType !=null ">
 			#{applyType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
@@ -654,7 +659,6 @@
 			houseVal,
 			housePlace,
 			carType,
-			grade,
 			carLocal,
 			carMonth,
 			carPrice, 

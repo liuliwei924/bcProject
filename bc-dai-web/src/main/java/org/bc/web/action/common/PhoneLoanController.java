@@ -3,6 +3,7 @@ package org.bc.web.action.common;
 import java.util.Date;
 import java.util.Map;
 
+import org.bc.admin.util.constant.BorrowConstant;
 import org.bc.admin.util.constant.CustConstant;
 import org.bc.admin.util.sys.MapLocaltionUtil;
 import org.bc.admin.util.sys.ServiceKey;
@@ -62,9 +63,7 @@ public class PhoneLoanController extends BaseController {
 			}
 			
 			//渠道号处理
-			String channelDetail = request.getParameter("cd");
-			String channelCode = request.getParameter("cc");
-			String pageReferer = request.getParameter("pageReferer");
+			String channelDetail = request.getParameter(BorrowConstant.RegSourceType);
 			if (StringUtils.isEmpty(channelDetail)) {
 				channelDetail = request.getParameter("channelDetail");
 			}
@@ -72,8 +71,16 @@ public class PhoneLoanController extends BaseController {
 			channelDetail = StringUtils.isEmpty(channelDetail) ? CustConstant.CUST_SOURCETYPE_DEFAULT
 					: channelDetail;
 			
-			channelCode = StringUtils.isEmpty(channelCode) ? CustConstant.CUST_SOURCETYPE_DEFAULT
-					: channelCode;
+			String pageReferer = request.getParameter("pageReferer");
+			if (StringUtils.isEmpty(pageReferer)) {
+				pageReferer = request.getHeader("referer");
+				if (!StringUtils.isEmpty(pageReferer) && pageReferer.lastIndexOf("/") != -1) {
+					pageReferer = pageReferer.substring(pageReferer.lastIndexOf("/") + 1, pageReferer.length());
+					if (pageReferer.indexOf("?") != -1) {
+						pageReferer = pageReferer.substring(0, pageReferer.indexOf("?"));
+					}
+				}
+			}
 			
 			//城市定位处理
 			if (StringUtils.isEmpty(cityName)) {
@@ -93,7 +100,6 @@ public class PhoneLoanController extends BaseController {
 			applyParam.addAttr("telephone", telephone);
 			applyParam.addAttr("iszhapian", telInfo.get("iszhapian"));
 			applyParam.addAttr("channelDetail", channelDetail);
-			applyParam.addAttr("channelCode", channelCode);
 			applyParam.addAttr("cityName", defaultCity);
 			applyParam.addAttr("userAgent", request.getHeader("user-Agent"));
 			if (StringUtils.isEmpty(request.getParameter("cityArea"))) {

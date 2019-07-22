@@ -6,7 +6,9 @@ package org.bc.admin.util.constant;
  *
  */
 public class BorrowConstant {
-
+	/**注册类型**/
+	public static final String RegSourceType = "regSourceType";
+	
 	public static class ApplyStatus{
 		/***未处理*/
 		public static final int NO_Handle = 0;
@@ -30,8 +32,17 @@ public class BorrowConstant {
 	}
 	
 	public static class workType{
+		/***自由职业*/
+		public static final int free_work= 1;
+		
 		/***企业*/
 		public static final int qy = 2;
+		
+		/***个体*/
+		public static final int gt= 3;
+		
+		/***上班*/
+		public static final int worker= 4;
 
 	}
 }

@@ -6,4 +6,5 @@ public class Key_SMS {
 	public final static String Key_SMS_BORROW_APPLY = "borrowApply";
 	
 	public final static String SEND_SMS_STATUS = "send_sms_status";
+
 }

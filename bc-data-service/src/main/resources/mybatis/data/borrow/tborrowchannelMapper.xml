@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BORROWCHANNEL">
+    
+	<select id="query" resultType="map" parameterType="map">
+		SELECT
+			t.channelCode,
+			t.channelName,
+			t.type, 
+			t.flowType, 
+			t.merchId,
+			t.launchPlace, 
+			t.teamNo,
+			t1.teamName,
+			DATE_FORMAT(t.createTime,'%Y-%m-%d %H:%i:%s') as createTime,
+			t.allotGrade,
+			t.isCost
+		FROM T_BORROW_CHANNEL t LEFT JOIN t_borrow_team t1 ON t.teamNo = t1.teamNo
+		<where>
+			<if test="channelCode != null and channelCode != ''">
+			  and t.channelCode = #{channelCode}
+			 </if>
+			 <if test="channelName != null and channelName != ''">
+			  and t.channelCode like CONCAT('%', #{channelCode},'%') 
+			 </if>
+			<if test="type != null and type != ''">
+				and t.type = #{type}
+			</if>
+			<if test="flowType != null and flowType != ''">
+				and t.flowType = #{flowType}
+			</if>
+			<if test="merchId != null and merchId != ''">
+				and t.merchId = #{merchId}
+			</if>
+			<if test="launchPlace != null and launchPlace != ''">
+				and t.launchPlace = #{launchPlace}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and t.createTime = #{createTime}
+			</if>
+			<if test="teamNo != null and teamNo != ''">
+				and t.teamNo = #{teamNo}
+			</if>
+			<if test="teamName != null and teamName != ''">
+				and t1.teamName = #{teamName}
+			</if>
+			<if test="allotGrade != null and allotGrade != ''">
+				and t.allotGrade = #{allotGrade}
+			</if>
+			<if test="isCost != null and isCost != ''">
+				and t.isCost = #{isCost}
+			</if>
+		</where>
+		<if test="orderSql != null and orderSql!='' "> 
+			ORDER by ${orderSql}
+		</if>
+	</select>
+	
+	<select id="exsitChannel" resultType="map" parameterType="map">
+		SELECT GROUP_CONCAT(channelCode) as 'channelCodes' FROM T_BORROW_CHANNEL
+		WHERE  LOCATE(channelCode,#{channelCode})=1 OR LOCATE(#{channelCode},channelCode)=1
+	</select>
+	
+	<select id="queryInfos" resultType="map" parameterType="map">
+		SELECT
+			c.channelCode,
+			c.channelName,
+			c.type, 
+			c.flowType, 
+			c.merchId,
+			c.launchPlace,
+			c.teamNo, 
+			dtl.detailCode,
+			dtl.channelCode, 
+			dtl.pageURL, 
+			dtl.postName, 
+			dtl.contact, 
+			dtl.contactTel, 
+			DATE_FORMAT(dtl.launchTime,'%Y-%m-%d %H:%i:%s') as launchTime  ,
+			dtl.createBy, 
+			DATE_FORMAT(dtl.createTime,'%Y-%m-%d %H:%i:%s') as entryTime,
+			DATE_FORMAT(c.createTime,'%Y-%m-%d %H:%i:%s') as createTime  
+		FROM T_BORROW_CHANNEL c
+			 LEFT JOIN T_BORROW_CHANNEL_DTL dtl ON c.channelCode = dtl.channelCode  
+		<where>
+			<if test="channelCode != null and channelCode != ''">
+			  and c.channelCode = #{channelCode}
+			 </if>
+			  <if test="channelName != null and channelName != ''">
+			  and c.channelCode like CONCAT('%', #{channelCode},'%') 
+			 </if>
+			<if test="type != null and type != ''">
+				and c.type = #{type}
+			</if>
+			<if test="flowType != null and flowType != ''">
+				and c.flowType = #{flowType}
+			</if>
+			<if test="launchPlace != null and launchPlace != ''">
+				and c.launchPlace = #{launchPlace}
+			</if>
+			<if test="teamNo != null and teamNo != ''">
+				and c.teamNo = #{teamNo}
+			</if>
+			<if test="detailCode != null and detailCode != ''">
+			  and dtl.detailCode = #{detailCode}
+			</if>
+			<if test="contact != null and contact != ''">
+				and dtl.contact = #{contact}
+			</if>
+			<if test="contactTel != null and contactTel != ''">
+				and dtl.contactTel = #{contactTel}
+			</if>
+		</where>
+		<if test="orderSql != null and orderSql!='' "> 
+			ORDER by ${orderSql}
+		</if>
+	</select>
+
+	<select id="count" resultType="int" parameterType="map">
+		SELECT COUNT(*) FROM T_BORROW_CHANNEL t LEFT JOIN t_borrow_team t1 ON t.teamNo = t1.teamNo
+		<where>
+		<if test="channelCode != null and channelCode != ''">
+			and t.channelCode = #{channelCode}
+		 </if>
+		 <if test="channelName != null and channelName != ''">
+		  and t.channelCode like CONCAT('%', #{channelCode},'%') 
+		 </if>
+		<if test="type != null and type != ''">
+			and t.type = #{type}
+		</if>
+		<if test="flowType != null and flowType != ''">
+			and t.flowType = #{flowType}
+		</if>
+		<if test="merchId != null and merchId != ''">
+			and t.merchId = #{merchId}
+		</if>
+		<if test="launchPlace != null and launchPlace != ''">
+			and t.launchPlace = #{launchPlace}
+		</if>
+		<if test="createTime != null and createTime != ''">
+			and t.createTime = #{createTime}
+		</if>
+		<if test="teamNo != null and teamNo != ''">
+			and t.teamNo = #{teamNo}
+		</if>
+		<if test="teamName != null and teamName != ''">
+			and t1.teamName = #{teamName}
+		</if>
+		<if test="allotGrade != null and allotGrade != ''">
+			and t.allotGrade = #{allotGrade}
+		</if>
+		<if test="isCost != null and isCost != ''">
+			and t.isCost = #{isCost}
+		</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="map">
+		INSERT INTO T_BORROW_CHANNEL (
+			channelCode,
+			channelName,
+			type,
+			flowType,
+			merchId,
+			launchPlace,
+			createTime,
+			teamNo,
+			allotGrade,
+			isCost
+		)
+		VALUES ( 
+			#{channelCode, jdbcType=VARCHAR},
+			#{channelName, jdbcType=VARCHAR},
+			<if test="type !=null ">
+			#{type, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="type ==null ">
+			0 ,
+			</if>
+			<if test="flowType !=null ">
+			#{flowType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="flowType ==null ">
+			0 ,
+			</if>
+			#{merchId, jdbcType=VARCHAR},
+			<if test="launchPlace !=null ">
+			#{launchPlace, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="launchPlace ==null ">
+			0 ,
+			</if>
+			#{createTime, jdbcType=TIMESTAMP,typeHandler=DateHandler},
+			#{teamNo, jdbcType=VARCHAR},
+			<if test="allotGrade !=null ">
+			#{allotGrade, jdbcType=INTEGER,typeHandler=NumberHandler},
+			</if>
+			<if test="allotGrade ==null ">
+			1,
+			</if>
+			<if test="isCost !=null ">
+			#{isCost, jdbcType=INTEGER,typeHandler=NumberHandler}
+			</if>
+			<if test="isCost ==null ">
+			1
+			</if>
+		)
+	</insert>
+	<delete id="delete" parameterType="map">
+		DELETE FROM T_BORROW_CHANNEL 
+		<where> 
+			channelCode = #{channelCode}
+		</where>
+	</delete>
+	<update id="update" parameterType="map">
+		UPDATE T_BORROW_CHANNEL  
+		<set>
+			<if test="type != null">
+				type = #{type, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="channelName != null">
+				channelName = #{channelName, jdbcType=VARCHAR},  
+			</if>
+			<if test="flowType != null">
+				flowType = #{flowType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="merchId != null">
+				merchId = #{merchId, jdbcType=VARCHAR},  
+			</if>
+			<if test="launchPlace != null">
+				launchPlace = #{launchPlace, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="teamNo != null">
+				teamNo = #{teamNo, jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime, jdbcType=TIMESTAMP,typeHandler=DateHandler},
+			</if>
+			<if test="allotGrade != null">
+				allotGrade = #{allotGrade, jdbcType=INTEGER,typeHandler=NumberHandler},
+			</if>
+			<if test="isCost != null">
+				isCost = #{isCost, jdbcType=INTEGER,typeHandler=NumberHandler}
+			</if>
+		</set>
+		<where>
+			  channelCode = #{channelCode}
+		</where>
+	</update>
+</mapper>
