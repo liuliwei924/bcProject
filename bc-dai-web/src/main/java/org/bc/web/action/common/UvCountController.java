@@ -2,6 +2,7 @@ package org.bc.web.action.common;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.llw.com.context.AppProperties;
 import org.llw.com.context.AppResult;
 import org.llw.common.web.base.BaseController;
 import org.springframework.stereotype.Controller;
@@ -24,10 +25,18 @@ public class UvCountController extends BaseController {
 	 */
 	@RequestMapping("uvRecordCount")
 	@ResponseBody
-	public AppResult uvRecordCount (HttpServletRequest request) {
-		AppResult result = new AppResult();
-		request.getSession().setAttribute("message",request.getQueryString());
-		return result;
+	public String uvRecordCount (HttpServletRequest request) {
+		//AppResult result = new AppResult();
+		
+		String port = AppProperties.getProperties("server.port");
+		
+		String sessionId = request.getSession().getId();
+		String str = "port=" + port + "----session:" +sessionId;
+		
+		System.out.println("port=" + port + "----session:" +sessionId );
+		
+		//request.getSession().setAttribute("message",request.getQueryString());
+		return str;
 	}
 	
 	/**
@@ -39,9 +48,6 @@ public class UvCountController extends BaseController {
 	@ResponseBody
 	public AppResult pageRecordCount (HttpServletRequest request) {
 		AppResult result = new AppResult();
-		
-		result.putAttr("sessionId",request.getSession().getId());
-		result.putAttr("message",request.getSession().getAttribute("message"));
 		return result;
 	}
 	
