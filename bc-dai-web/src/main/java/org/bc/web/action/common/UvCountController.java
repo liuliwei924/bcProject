@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/uv/")
 public class UvCountController extends BaseController {
 	
-	
 	/**
 	 * uv统计，每天的
 	 * @param request
@@ -27,7 +26,7 @@ public class UvCountController extends BaseController {
 	@ResponseBody
 	public AppResult uvRecordCount (HttpServletRequest request) {
 		AppResult result = new AppResult();
-		
+		request.getSession().setAttribute("message",request.getQueryString());
 		return result;
 	}
 	
@@ -41,6 +40,8 @@ public class UvCountController extends BaseController {
 	public AppResult pageRecordCount (HttpServletRequest request) {
 		AppResult result = new AppResult();
 		
+		result.putAttr("sessionId",request.getSession().getId());
+		result.putAttr("message",request.getSession().getAttribute("message"));
 		return result;
 	}
 	

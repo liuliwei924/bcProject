@@ -6,9 +6,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import lombok.extern.slf4j.Slf4j;
 
+@EnableRedisHttpSession
 @SpringBootApplication
 @ComponentScan(basePackages = { "org.bc.*" ,"org.llw.*"})
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
