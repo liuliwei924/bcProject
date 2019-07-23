@@ -63,10 +63,6 @@ public class BorrowChannelService extends BaseService {
 		return result;
 	}
 	
-	public AppResult queryInfos(AppParam params){
-		return super.query(params, NAMESPACE, "queryInfos");
-	}
-	
 	/**
 	 * insert
 	 * @param params

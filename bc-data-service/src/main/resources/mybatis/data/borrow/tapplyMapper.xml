@@ -48,7 +48,7 @@
 				and status in(${inStatus})
 			</if>
 			<if test="beginTranferTime != null">
-				and tranferTime <![CDATA[>=]]> #{beginTranferTime}
+				and tranferTime <![CDATA[<=]]> #{beginTranferTime}
 			</if>
     </sql>
     
@@ -640,6 +640,9 @@
 		       </otherwise>
 		     </choose>
 			
+			<if test="notStatus != null and notStatus != ''">
+				and status != #{notStatus}
+			</if>
 		</where>
 	</update>
 	

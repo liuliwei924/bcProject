@@ -46,24 +46,20 @@ public class TranferDataTimer implements Runnable {
 		log.info("***************************开始数据传输**************");
 		
 		while (true) {
-			boolean isLock = false;
+			
+			try {
+				if(!redisLock.lock(timer_lock_key, 1L,60*2)) {
+					Thread.sleep(SLEEP_TIME);//睡15秒，相当于15秒跑一次
+					continue;
+				} 
+			}catch (Exception e) {
+				log.error("获取redis锁报错：",e);
+			}
+			
 			try{
-				
-				isLock = redisLock.lock(timer_lock_key, 1);
-				if(!isLock) continue;
-				
-				log.info("***************获取到锁*********************");
 				
 				 if(!SysParamsUtil.getBoleanByKey(SysParamConstont.TRANFER_ORDER_JOB_ENABLE, false)) {
 					 log.info("***************转单任务未开启*********************");
-					
-					 try {
-							Thread.sleep(56000);//睡15秒，相当于15秒跑一次
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-							//Thread.currentThread().interrupt();
-						}
-					 
 					 continue;
 				 }
 				
@@ -173,12 +169,7 @@ public class TranferDataTimer implements Runnable {
 				
 			}finally {
 				
-				if(isLock){
-					
-					redisLock.unlock(timer_lock_key, 1);
-				} else{
-					log.info("***************为获取到锁，sleep*********************");
-				}
+				redisLock.unlock(timer_lock_key, 1L);
 				try {
 					Thread.sleep(SLEEP_TIME);//睡15秒，相当于15秒跑一次
 				} catch (InterruptedException e) {
@@ -213,6 +204,7 @@ public class TranferDataTimer implements Runnable {
 		appParam.addAttr("status", updateStatus);
 		appParam.addAttr("errMsg", errorMessage+"[" + returnCode + "]");
 		appParam.addAttr("tranTime", new Date());
+		appParam.addAttr("notStatus", BorrowConstant.ApplyStatus.Success);
 		
 		if("003".equals(returnCode)) {
 			appParam.addAttr("isRepeat", 1);// 申请重复
