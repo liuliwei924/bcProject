@@ -141,6 +141,8 @@ public class TranferDataTimer implements Runnable {
 							String jsonStr = HttpClientUtil.getInstance().sendHttpPost(req_url, paramMap);
 							
 							retMap = JsonUtil.getInstance().json2Object(jsonStr, Map.class);
+							
+							retMap.put("applyId", applyId);
 						}catch (Exception e) {
 							retMap = new HashMap<String,Object>();
 							retMap.put("applyId", applyId);
