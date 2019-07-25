@@ -235,9 +235,9 @@ public class ApplyService extends BaseService {
 		
 		emptyToNull(params.getAttr());
 		
-		int haveDetail = NumberUtil.getInt(params.getAttr("haveDetail"), -1);
+		int haveDetail = NumberUtil.getInt(params.getAttr("haveDetail"), 0);
 		
-		if (haveDetail == -1) {//如果haveDetail没传，默认为1
+		if (haveDetail == 0) {//如果haveDetail没传，默认为1
 			haveDetail = SeniorCfgUtils.haveDetail(params.getAttr());
 			
 		}
