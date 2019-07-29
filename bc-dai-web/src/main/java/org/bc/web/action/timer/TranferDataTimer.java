@@ -195,8 +195,8 @@ public class TranferDataTimer implements Runnable {
 		
 		String returnCode = StringUtil.getString(retMap.get("returnCode"));
 		String errorMessage = StringUtil.getString(retMap.get("errorMessage"));
-		
-		boolean isSuccess = SUCCESS.equals(returnCode);
+		// 推送成功或者推送重复都算成功
+		boolean isSuccess = SUCCESS.equals(returnCode) || "003".equals(returnCode);
 		
 		int updateStatus = isSuccess? 
 				BorrowConstant.ApplyStatus.Success :BorrowConstant.ApplyStatus.Fail;
