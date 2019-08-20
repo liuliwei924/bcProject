@@ -1,24 +1,19 @@
 package org.bc.data.service.sys;
 
 
-import org.llw.com.constant.DuoduoConstant;
 import org.llw.com.context.AppParam;
 import org.llw.com.context.AppResult;
-import org.llw.common.core.service.BaseService;
+import org.llw.common.core.service.ApiBaseServiceImpl;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;;
 
 @Lazy
 @Service
-public class AreaService extends BaseService {
+public class AreaService extends ApiBaseServiceImpl {
 	private static final String NAMESPACE = "AREA";
 
-	public AppResult query(AppParam context) {
-		return super.query(context, NAMESPACE);
-	}
-	
-	public AppResult queryByPage(AppParam context) {
-		return super.queryByPage(context, NAMESPACE);
+	public AreaService() {
+		super.namespace = NAMESPACE;
 	}
 	
 	public AppResult queryAreaShow(AppParam context) {
@@ -69,15 +64,7 @@ public class AreaService extends BaseService {
 	public AppResult queryGroupDistrict(AppParam context) {
 		return super.query(context, NAMESPACE, "queryGroupDistrict");
 	}
-	
-	
-	public AppResult queryCount(AppParam context) {
-		int size = getDao().count(NAMESPACE, super.COUNT,context.getAttr(),context.getDataBase());
-		AppResult result = new AppResult();
-		result.putAttr(DuoduoConstant.TOTAL_SIZE, size);
-		return result;
-	}
-	
+
 	public AppResult queryProvinceByCity (AppParam params){
 		AppResult result = new AppResult();
 		AppResult queryResult = this.query(params, NAMESPACE, "queryProvinceByCity");

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Map;
 
 import org.bc.admin.util.borrow.BorrowChannelUtil;
-import org.llw.com.constant.DuoduoConstant;
 import org.llw.com.context.AppParam;
 import org.llw.com.context.AppResult;
 import org.llw.com.exception.AppException;
@@ -12,7 +11,7 @@ import org.llw.com.exception.DuoduoError;
 import org.llw.com.exception.SysException;
 import org.llw.com.util.StringUtil;
 import org.llw.com.web.session.DuoduoSession;
-import org.llw.common.core.service.BaseService;
+import org.llw.common.core.service.ApiBaseServiceImpl;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -20,18 +19,12 @@ import org.springframework.util.StringUtils;
 
 @Lazy
 @Service
-public class BorrowChannelService extends BaseService {
+public class BorrowChannelService extends ApiBaseServiceImpl {
 	private static final String NAMESPACE = "BORROWCHANNEL";
 
-	/**
-	 * querys
-	 * @param params
-	 * @return
-	 */
-	public AppResult query(AppParam params) {
-		return super.query(params, NAMESPACE);
+	public BorrowChannelService() {
+		super.namespace = NAMESPACE;
 	}
-	
 	
 	/**
 	 * querys
@@ -42,27 +35,7 @@ public class BorrowChannelService extends BaseService {
 		return super.query(params, NAMESPACE,"exsitChannel");
 	}
 	
-	/**
-	 * queryByPage
-	 * @param params
-	 * @return
-	 */
-	public AppResult queryByPage(AppParam params) {
-		return super.queryByPage(params, NAMESPACE);
-	}
-	
-	/**
-	 * queryCount
-	 * @param params
-	 * @return
-	 */
-	public AppResult queryCount(AppParam params) {
-		int size = getDao().count(NAMESPACE, super.COUNT,params.getAttr(),params.getDataBase());
-		AppResult result = new AppResult();
-		result.putAttr(DuoduoConstant.TOTAL_SIZE, size);
-		return result;
-	}
-	
+
 	/**
 	 * insert
 	 * @param params
@@ -85,7 +58,7 @@ public class BorrowChannelService extends BaseService {
 		}
 		params.addAttr("createTime", new Date());
 		params.addAttr("createBy", DuoduoSession.getUserName());
-		AppResult result = super.insert(params, NAMESPACE);
+		AppResult result = super.insert(params);
 		if(result.isSuccess()){
 			BorrowChannelUtil.refreshBorrowChannel();
 		}
@@ -102,7 +75,7 @@ public class BorrowChannelService extends BaseService {
 		if(StringUtils.isEmpty(channelCode)){
 			throw new AppException(DuoduoError.UPDATE_NO_PARAMS);
 		}
-		AppResult result = super.update(params, NAMESPACE);
+		AppResult result = this.update(params);
 		if(result.isSuccess()){
 			BorrowChannelUtil.refreshBorrowChannel();
 		}
@@ -122,10 +95,10 @@ public class BorrowChannelService extends BaseService {
 				AppParam param = new AppParam();
 				param.addAttr("channelCode", id);
 				
-				result = super.delete(param, NAMESPACE);
+				result = super.delete(param);
 			}
 		} else if (!StringUtils.isEmpty(params.getAttr("channelCode"))) {
-			result = super.delete(params, NAMESPACE);
+			result = super.delete(params);
 		} else {
 			throw new AppException(DuoduoError.DELETE_NO_ID);
 		}
