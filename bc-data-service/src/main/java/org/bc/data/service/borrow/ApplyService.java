@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.bc.admin.util.borrow.BorrowApplyUtils;
 import org.bc.admin.util.borrow.SeniorCfgUtils;
-import org.bc.admin.util.constant.PushType;
 import org.llw.com.context.AppParam;
 import org.llw.com.context.AppResult;
 import org.llw.com.security.MD5Util;
