@@ -74,7 +74,7 @@ public class FumiTaskJob {
 						 successTotal++;
 						
 					 }else{
-						 updatePushParams.addAttr("status", BorrowConstant.PushStatus.PUSH_ING); 
+						 updatePushParams.addAttr("status", BorrowConstant.PushStatus.PUSH_FAIL); 
 						 updatePushParams.addAttr("errMsg", retMap.get("returnMsg"));
 						 failTotal++;
 					 }
