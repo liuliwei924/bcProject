@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="APPLYPUSHRECORD">
+    <sql id="querySql">
+		<if test="pushId != null and pushId != ''">
+		  and pushId = #{pushId}
+		 </if>
+		<if test="applyId != null and applyId != ''">
+			and applyId = #{applyId}
+		</if>
+		<if test="telephone != null and telephone != ''">
+			and telephone = #{telephone}
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+		<if test="inStatus != null and inStatus != ''">
+			and status in(${inStatus})
+		</if>
+		<if test="errMsg != null and errMsg != ''">
+			and errMsg = #{errMsg}
+		</if>
+		<if test="pushCount != null and pushCount != ''">
+			and pushCount = #{pushCount}
+		</if>
+		<if test="lessCount != null and lessCount != ''">
+			and pushCount <![CDATA[<=]]> #{lessCount}
+		</if>
+		<if test="pushType != null and pushType != ''">
+			and pushType = #{pushType}
+		</if>
+		<if test="pushTypeName != null and pushTypeName != ''">
+			and pushTypeName = #{pushTypeName}
+		</if>
+		<if test="createTime != null and createTime != ''">
+			and createTime = #{createTime}
+		</if>
+		<if test="applyTime != null and applyTime != ''">
+			and applyTime = #{applyTime}
+		</if>
+    </sql>
+    
+	<select id="query" resultType="map" parameterType="map">
+		SELECT
+			pushId ,
+			applyId ,  
+			telephone ,  
+			status ,  
+			errMsg ,  
+			pushCount ,  
+			pushType ,  
+			pushTypeName ,  
+			DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i:%s') as "createTime",
+			DATE_FORMAT(createTime,'%Y-%m-%d %H:%i:%s') as "createTime",
+			DATE_FORMAT(applyTime,'%Y-%m-%d %H:%i:%s') as "applyTime"
+		FROM t_apply_push_record
+		<where>
+			<include refid="querySql"/>
+		</where>
+		<if test="orderSql != null and orderSql!='' "> 
+			ORDER by ${orderSql}
+		</if>
+	</select>
+
+	<select id="count" resultType="int" parameterType="map">
+		SELECT COUNT(*) FROM t_apply_push_record 
+		<where>
+			<include refid="querySql"/>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="map">
+		<selectKey resultType="java.lang.Long" order="AFTER" keyProperty="pushId">
+		   SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO t_apply_push_record (
+			applyId,
+			telephone,
+			status,
+			errMsg,
+			pushCount,
+			pushType,
+			pushTypeName,
+			createTime,
+			applyTime
+		)
+		VALUES ( 
+			#{applyId, jdbcType=BIGINT,typeHandler=NumberHandler}, 
+			#{telephone, jdbcType=CHAR}, 
+			<if test="status !=null ">
+			#{status, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="status ==null ">
+			0 ,
+			</if>
+			#{errMsg, jdbcType=VARCHAR}, 
+			<if test="pushCount !=null ">
+			#{pushCount, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="pushCount ==null ">
+			0 ,
+			</if>
+			<if test="pushType !=null ">
+			#{pushType, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="pushType ==null ">
+			1 ,
+			</if>
+			#{pushTypeName, jdbcType=VARCHAR}, 
+			#{createTime, jdbcType=TIMESTAMP,typeHandler=DateHandler}, 
+			#{applyTime, jdbcType=TIMESTAMP,typeHandler=DateHandler}
+		)
+	</insert>
+	<delete id="delete" parameterType="map">
+		DELETE FROM t_apply_push_record 
+		<where> 
+			pushId = #{pushId}
+		</where>
+	</delete>
+	<update id="update" parameterType="map">
+		UPDATE t_apply_push_record  
+		<set>
+			<if test="applyId != null">
+				applyId = #{applyId, jdbcType=BIGINT,typeHandler=NumberHandler},  
+			</if>
+			<if test="telephone != null">
+				telephone = #{telephone, jdbcType=CHAR},  
+			</if>
+			<if test="status != null">
+				status = #{status, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="errMsg != null">
+				errMsg = #{errMsg, jdbcType=VARCHAR},  
+			</if>
+			<if test="pushCount != null">
+				pushCount = #{pushCount, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="addPushCount != null and addPushCount == 1">
+				pushCount = pushCount +1,  
+			</if>
+			<if test="pushType != null">
+				pushType = #{pushType, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="pushTypeName != null">
+				pushTypeName = #{pushTypeName, jdbcType=VARCHAR},  
+			</if>
+			<if test="createTime != null">
+				createTime = #{createTime, jdbcType=TIMESTAMP,typeHandler=DateHandler},  
+			</if>
+			<if test="updateTime != null">
+				updateTime = #{updateTime, jdbcType=TIMESTAMP,typeHandler=DateHandler},  
+			</if>
+			<if test="applyTime != null">
+				applyTime = #{applyTime, jdbcType=TIMESTAMP,typeHandler=DateHandler}
+			</if>
+		</set>
+		<where>
+			  pushId = #{pushId}
+		    <if test="fromStatus != null and fromStatus != ''">
+				and status= #{fromStatus}
+			</if>
+		</where>
+	</update>
+	
+	<select id="queryPushList" resultType="map" parameterType="map">
+		SELECT
+		    t.pushId,
+			t1.applyId ,
+			t1.applyName ,  
+			t1.telephone ,  
+			t1.applyAmount ,  
+			t1.cityName ,  
+			t1.cityArea ,   
+			t1.channelCode ,  
+			t1.channelDetail ,  
+			t1.identifyNo ,  
+			t1.education ,  
+			t1.workType ,  
+			t1.cmpType ,  
+			t1.creditType ,  
+			t1.pubAmount ,  
+			t1.caseAmount ,  
+			t1.totalAmount ,  
+			t1.manageYear ,  
+			t1.wagesType ,  
+			t1.income , 
+			t1.iszhapian, 
+			t1.fundType ,  
+			t1.socialType ,  
+			t1.houseType ,  
+			t1.carType ,  
+			t1.haveWeiLi ,  
+			t1.zimaScore ,  
+			t1.insurType ,  
+			t1.insurMonth ,  
+			t1.insurMonthAmt ,  
+			DATE_FORMAT(t1.applyTime,'%Y-%m-%d %H:%i:%s') as "applyTime",
+			t1.age ,  
+			t1.sex ,  
+			t1.carMonthPay ,  
+			t1.houseMonthPay ,  
+			t1.insure ,  
+			t1.loanDeadline ,  
+			t1.insurPayType ,  
+			t1.fundMonth ,  
+			t1.socialMonth ,  
+			t1.houseVal ,  
+			t1.carPrice ,  
+			t1.hasLicense ,  
+			t1.applyIp ,  
+			t1.jobMonth ,  
+			t1.housePlace ,  
+			t1.carLocal ,  
+			t1.carYears ,  
+			t1.myLicense ,  
+			t1.myLoanHouse ,  
+			t1.houseMonth ,  
+			t1.carMonth ,  
+			DATE_FORMAT(birthday,'%Y-%m-%d') as 'birthday'
+		FROM t_apply_push_record t
+		JOIN t_apply t1 ON t.applyId = t1.applyId
+		<where>
+			<if test="pushType != null and pushType != ''">
+				and t.pushType = #{pushType}
+			</if>
+			<if test="status != null and status != ''">
+				and t.status = #{status}
+			</if>
+			<if test="inStatus != null and inStatus != ''">
+				and t.status in(${inStatus})
+			</if>
+			<if test="isRepeat != null and isRepeat != ''">
+				and t1.isRepeat=#{isRepeat}
+			</if>
+			<if test="limitMin != null and limitMin != ''">
+				<![CDATA[and (t1.haveDetail=1 OR t1.applyTime<date_add(now(), interval #{limitMin} minute))]]>
+			</if>
+		</where>
+		ORDER BY t1.applyTime DESC
+		<if test="limitSize != null and limitSize != ''">
+				limit 0,#{limitSize}
+		</if>
+	</select>
+</mapper>
