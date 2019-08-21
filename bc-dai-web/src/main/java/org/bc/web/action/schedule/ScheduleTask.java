@@ -11,7 +11,7 @@ public class ScheduleTask {
 	@Autowired
 	public FumiTaskJob fumiTaskJob;
 	
-	@Scheduled(cron="0 0/1 * * * ?")
+	@Scheduled(cron="0 0/2 * * * ?")
 	public void fumiTask(){
 		fumiTaskJob.execJob();
 	}
