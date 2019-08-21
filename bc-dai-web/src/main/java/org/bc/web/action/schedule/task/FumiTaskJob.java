@@ -37,10 +37,10 @@ public class FumiTaskJob {
 		long startTime = System.currentTimeMillis();
 		
 		 log.info("***************转福任务 start*********************");
-		 if(!SysParamsUtil.getBoleanByKey("TRANFER_FUMI_JOB_ENABLE", true)) {
+		/* if(!SysParamsUtil.getBoleanByKey("TRANFER_FUMI_JOB_ENABLE", true)) {
 			 log.info("***************转福米单任务未开启*********************");
 			 return;
-		 }
+		 }*/
 		 
 		 List<Map<String,Object>> dataList = new ArrayList<Map<String,Object>>();
 		 getPushData(dataList);
@@ -87,7 +87,7 @@ public class FumiTaskJob {
 					 ServiceKey.doCall(updatePushParams, ServiceKey.Key_data);
 
 				} catch (Exception e) {
-					log.error("福米base64 失败,返回信息={}",retMap,e);
+					log.error("福米请求失败,返回信息={}",retMap,e);
 					continue;
 				}
 				
