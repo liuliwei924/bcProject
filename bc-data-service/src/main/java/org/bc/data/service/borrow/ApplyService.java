@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.bc.admin.util.borrow.BorrowApplyUtils;
 import org.bc.admin.util.borrow.SeniorCfgUtils;
+import org.bc.admin.util.constant.PushType;
 import org.llw.com.context.AppParam;
 import org.llw.com.context.AppResult;
 import org.llw.com.security.MD5Util;
@@ -116,10 +117,9 @@ public class ApplyService extends ApiBaseServiceImpl {
 		emptyToNull(params.getAttr());
 		
 		int haveDetail = SeniorCfgUtils.haveDetail(params.getAttr());
-		
+		params.addAttr("haveDetail", haveDetail);
 		if(!StringUtils.isEmpty(uid)) {// 更新操作
 			params.addAttr("uid", uid);
-
 			this.update(params);
 			
 		}else {
@@ -133,6 +133,11 @@ public class ApplyService extends ApiBaseServiceImpl {
 			}
 			
 			result = this.insert(params);
+			
+			if(result.isSuccess() 
+					&& !StringUtil.getString(params.getAttr("applyName")).contains("测试")){
+				BorrowApplyUtils.insertPushRecord(params.getAttr("applyId"),telephone);
+			}
 		}
 		
 		result.putAttr("uid", uid);
@@ -210,5 +215,13 @@ public class ApplyService extends ApiBaseServiceImpl {
 		String uid = DateTimeUtil.toStringByParttern(new Date(), DateTimeUtil.DATE_PATTERNYYYYMMDDHHMMSSSSS)
 				+ StringUtil.getUUID();
 		return MD5Util.encrypt(uid);
+	}
+
+	@Override
+	public AppResult insertRetId(AppParam params) {
+		AppResult result = this.insert(params);
+		
+		result.putAttr("applyId", params.getAttr("applyId"));
+		return result;
 	}
 }

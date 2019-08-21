@@ -44,6 +44,9 @@
 			<if test="status != null and status != ''">
 				and status = #{status}
 			</if>
+			<if test="pushStatus != null and pushStatus != ''">
+				and status = #{status}
+			</if>
 			<if test="inStatus != null and inStatus != ''">
 				and status in(${inStatus})
 			</if>
@@ -95,6 +98,7 @@
 			DATE_FORMAT(tranTime,'%Y-%m-%d %H:%i:%s') as "tranTime",
 			isAgain ,  
 			status ,  
+			pushStatus,
 			age ,  
 			sex ,  
 			carMonthPay ,  
@@ -180,6 +184,7 @@
 			tranferTime,
 			isAgain,
 			status,
+			pushStatus,
 			age,
 			sex,
 			carMonthPay,
@@ -280,7 +285,7 @@
 			#{haveWeiLi, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
 			</if>
 			<if test="haveWeiLi ==null ">
-			-1.00 ,
+			0.00 ,
 			</if>
 			<if test="zimaScore !=null ">
 			#{zimaScore, jdbcType=NUMERIC,typeHandler=NumberHandler}, 
@@ -318,6 +323,12 @@
 			#{status, jdbcType=INTEGER,typeHandler=NumberHandler}, 
 			</if>
 			<if test="status ==null ">
+			0 ,
+			</if>
+			<if test="pushStatus !=null ">
+			#{pushStatus, jdbcType=INTEGER,typeHandler=NumberHandler}, 
+			</if>
+			<if test="pushStatus ==null ">
 			0 ,
 			</if>
 			#{age, jdbcType=INTEGER,typeHandler=NumberHandler}, 
@@ -550,6 +561,9 @@
 			</if>
 			<if test="status != null">
 				status = #{status, jdbcType=INTEGER,typeHandler=NumberHandler},  
+			</if>
+			<if test="pushStatus != null">
+				pushStatus = #{pushStatus, jdbcType=INTEGER,typeHandler=NumberHandler},  
 			</if>
 			<if test="age != null">
 				age = #{age, jdbcType=INTEGER,typeHandler=NumberHandler},  

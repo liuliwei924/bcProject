@@ -36,7 +36,7 @@ public class SmsTenXunSendUtil {
 			SmsSingleSender singleSender = new SmsSingleSender(appid, smsConfig.getAppkey());
 			// 指定模板单发
 			// 假设短信模板内容为：测试短信，{1}，{2}，{3}，上学。
-			SmsSingleSenderResult singleSenderResult = singleSender.sendWithParam("86", telephone, smsConfig.getTempId(), params,
+			SmsSingleSenderResult singleSenderResult = singleSender.sendWithParam("86", telephone, Integer.parseInt(smsConfig.getTempId()), params,
 					smsConfig.getSignName(), "", "");
 			int ret = singleSenderResult.result;
 			if (ret == 0) {

@@ -73,4 +73,12 @@ public class AreaService extends ApiBaseServiceImpl {
 		}
 		return result;
 	}
+	
+	@Override
+	public AppResult insertRetId(AppParam params) {
+		AppResult result = this.insert(params);
+		
+		result.putAttr("id", params.getAttr("id"));
+		return result;
+	}
 }

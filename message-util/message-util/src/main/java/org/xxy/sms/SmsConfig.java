@@ -12,7 +12,7 @@ public class SmsConfig implements Serializable {
 	
 	private String signName;
 	
-	private int tempId;
+	private String tempId;
 	
 	private int smsType;
 
@@ -41,11 +41,11 @@ public class SmsConfig implements Serializable {
 		this.signName = signName;
 	}
 
-	public int getTempId() {
+	public String getTempId() {
 		return tempId;
 	}
 
-	public void setTempId(int tempId) {
+	public void setTempId(String tempId) {
 		this.tempId = tempId;
 	}
 	

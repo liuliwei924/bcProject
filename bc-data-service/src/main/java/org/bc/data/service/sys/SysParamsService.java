@@ -35,4 +35,12 @@ public class SysParamsService extends ApiBaseServiceImpl {
 		SysParamsUtil.refreshValue(context.getAttr("paramCode").toString(),context.getAttr("paramValue").toString());
 		return result;
 	}
+	
+	@Override
+	public AppResult insertRetId(AppParam params) {
+		AppResult result = this.insert(params);
+		
+		result.putAttr("paramCode", params.getAttr("paramCode"));
+		return result;
+	}
 }

@@ -58,11 +58,11 @@
 		<logger name="org.quartz.core" level="${base_level}" />
 		<logger name="com.google" level="error" />
 		<logger name="net.rubyeye" level="error" />
-		<logger name="org.mybatis" level="${base_level}" />
+		<logger name="org.mybatis" level="debug" />
 		<logger name="org.apache" level="${base_level}" />
 		<logger name="org.ddq" level="${base_level}" />
 		<logger name="org.xxjr" level="${base_level}" />
-		<Root  level="${base_level}">
+		<Root  level="debug">
 			<appender-ref ref="RollingFileInfo" />
 			<appender-ref ref="RollingFileError" />
 			<appender-ref ref="Console" />

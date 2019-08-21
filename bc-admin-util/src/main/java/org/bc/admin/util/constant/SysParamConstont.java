@@ -15,5 +15,8 @@ public class SysParamConstont {
 		public static final int Juhe = 2;
 		 /***微网通联*/
 		public static final int LMobile = 3;
+		
+		 /***阿里云*/
+		public static final int aliyun = 4;
 	}
 }

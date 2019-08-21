@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.xxy.sms.SmsAliyunUtil;
 import org.xxy.sms.SmsConfig;
 import org.xxy.sms.SmsJuheSendUtil;
 import org.xxy.sms.SmsLMobileUtil;
@@ -138,6 +139,9 @@ public class SmsSendController extends BaseController {
 		}else if(smsType == SysParamConstont.SmsType.LMobile) {
 			
 			result = SmsLMobileUtil.sendCode(telephone, random, smsConfig);
+		}else if(smsType == SysParamConstont.SmsType.aliyun) {
+			
+			result = SmsAliyunUtil.sendSms(telephone, random, smsConfig);
 		}else {
 			result.setMessage("暂不支持发送短信");
 			result.setSuccess(false);

@@ -10,11 +10,14 @@ import org.llw.com.context.AppResult;
 import org.llw.com.util.NumberUtil;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 贷款申请
  * @author liulw 2017-07-20
  *
  */
+@Slf4j
 public class BorrowApplyUtils {
 
 	/**
@@ -81,6 +84,24 @@ public class BorrowApplyUtils {
 			return result.getRow(0);
 		else
 			return null;
+	}
+	
+	public static int insertPushRecord(Object applyId,Object telephone) {
+		int insertSize = 0;
+		try{
+			AppParam insertParam = new AppParam("applyPushRecordService","insert");
+			insertParam.addAttr("telephone", telephone);
+			insertParam.addAttr("applyId", applyId);
+			AppResult result = ServiceKey.doCall(insertParam, ServiceKey.Key_data);
+			
+			insertSize = result.getInsertCount();
+		}catch(Exception e){
+			insertSize = 0;
+			log.error("插入推送数据记录失败,applyId={},telephone={}",
+					applyId,telephone,e);
+		}
+		
+		return insertSize;
 	}
 	
 	public static boolean isTestUser (String telephone) {

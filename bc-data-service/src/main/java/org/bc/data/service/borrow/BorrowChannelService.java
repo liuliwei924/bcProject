@@ -105,4 +105,12 @@ public class BorrowChannelService extends ApiBaseServiceImpl {
 		BorrowChannelUtil.refreshBorrowChannel();
 		return result;
 	}
+	
+	@Override
+	public AppResult insertRetId(AppParam params) {
+		AppResult result = this.insert(params);
+		
+		result.putAttr("channelCode", params.getAttr("channelCode"));
+		return result;
+	}
 }

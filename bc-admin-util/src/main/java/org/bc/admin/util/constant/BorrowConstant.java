@@ -45,4 +45,20 @@ public class BorrowConstant {
 		public static final int worker= 4;
 
 	}
+	
+	/**t_apply_push_record
+	 * 推送记录表中status状态
+	 * @author HP
+	 *
+	 */
+	public static class PushStatus{
+		/***未推*/
+		public static final int NO_PUSH = 0;
+		/***推送成功*/
+		public static final int PUSH_SUCCESS = 1;
+		/***推送失败*/
+		public static final int PUSH_FAIL = 2;
+		/***推送中*/
+		public static final int PUSH_ING = 9;
+	}
 }
