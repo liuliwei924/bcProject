@@ -259,7 +259,7 @@ public class FumiTaskJob {
 				int dataInt = Integer.parseInt(data.toString());
 				if(dataInt ==1){
 					bean.setIsHave(0);
-					bean.setHaveName("寿险 ");
+					bean.setHaveName("寿险");
 				}else if(dataInt ==2){
 					bean.setIsHave(0);
 					bean.setHaveName("财险");
