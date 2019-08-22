@@ -17,8 +17,7 @@
         <RollingFile name="RollingFileInfo" fileName="${log_path}/${log_file_name}_info.log"
                      filePattern="${log_path}/$${date:yyyy-MM}/${log_file_name}_info-%d{yyyy-MM-dd}-%i.log.gz">
             <Filters>
-                <ThresholdFilter level="INFO" />
-                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL" />
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
             <PatternLayout pattern="${log_pattern}" />
             <param name="Encoding" value="UTF-8"  />
@@ -34,7 +33,7 @@
  
        <RollingFile name="RollingFileError" fileName="${log_path}/${log_file_name}_error.log"
                      filePattern="${log_path}/$${date:yyyy-MM}/${log_file_name}_error-%d{yyyy-MM-dd}-%i.log.gz">
-            <ThresholdFilter level="ERROR" />
+            <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${log_pattern}" />
             <param name="Encoding" value="UTF-8"  />
             <Policies>
