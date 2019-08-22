@@ -15,6 +15,7 @@ import org.llw.com.http.HttpClientUtil;
 import org.llw.com.security.BASE64;
 import org.llw.com.security.MD5Util;
 import org.llw.com.util.JsonUtil;
+import org.llw.com.util.StringUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -124,13 +125,7 @@ public class FumiTaskJob {
 			AppParam updateParam = new AppParam("applyPushRecordService","update");
 			
 			for(Map<String,Object> dataMap : result.getRows()){
-				
-				if(StringUtils.isEmpty(dataMap.get("telephone")) || 
-						StringUtils.isEmpty(dataMap.get("applyName")) ||
-						StringUtils.isEmpty(dataMap.get("applyAmount"))){
-					continue;
-				}
-				
+			
 				updateParam.addAttr("pushId", dataMap.get("pushId"));
 				updateParam.addAttr("fromStatus", BorrowConstant.PushStatus.NO_PUSH+"");
 				updateParam.addAttr("status", BorrowConstant.PushStatus.PUSH_ING);
@@ -139,9 +134,12 @@ public class FumiTaskJob {
 				if(updateResult.getUpdateCount() > 0){//开始封装数据
 					fumiMap = new HashMap<String,Object>();
 					
-					fumiMap.put("user_name", dataMap.get("applyName"));
+					String applyName = StringUtil.getString(dataMap.get("applyName"));
+					String applyAmount = StringUtil.getString(dataMap.get("applyAmount"));
+					
 					fumiMap.put("user_phone", dataMap.get("telephone"));
-					fumiMap.put("amount", dataMap.get("applyAmount"));
+					fumiMap.put("user_name", StringUtils.isEmpty(applyName)? "未知" : applyName);
+					fumiMap.put("amount", StringUtils.isEmpty(applyAmount)? 0 : applyAmount);
 					//公积金 1-有 0否
 					fumiMap.put("is_reserved", changeDataType0(dataMap.get("fundType")));
 					//社保 1-有 0否
@@ -214,13 +212,13 @@ public class FumiTaskJob {
 				
 				if(dataInt ==3){
 					bean.setIsHave(0);
-					bean.setHaveName("贷款车");
+					bean.setHaveName("贷款");
 				}else if(dataInt ==4){
 					bean.setIsHave(0);
-					bean.setHaveName("全款车");
+					bean.setHaveName("全款");
 				}else if(dataInt>=5){
 					bean.setIsHave(0);
-					bean.setHaveName("其他房");
+					bean.setHaveName("其他");
 				}
 			}
 			
