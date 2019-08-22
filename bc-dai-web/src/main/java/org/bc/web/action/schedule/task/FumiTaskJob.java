@@ -66,9 +66,17 @@ public class FumiTaskJob {
 					 dataJson = JsonUtil.getInstance().object2JSON(dataMap);
 					 base64DataStr = BASE64.getEncoder().encodeToString(dataJson.getBytes("UTF-8"));
 					 paramMap.put("list", base64DataStr);
-					 String jsonStr = HttpClientUtil.getInstance().sendHttpPost(Req_BASE_URL, paramMap);
-					 retMap = JsonUtil.getInstance().json2Object(jsonStr, Map.class);
-					
+					 try{
+						 String jsonStr = HttpClientUtil.getInstance().sendHttpPost(Req_BASE_URL, paramMap);
+						 retMap = JsonUtil.getInstance().json2Object(jsonStr, Map.class);
+					 }catch (Exception e) {
+						 log.error("福米入库失败,返回信息={}",retMap,e);
+						
+						 retMap = new HashMap<String,String>();
+						 retMap.put("returnCode", "0999");
+						 retMap.put("returnMsg", "福米请求接口异常");
+					 }
+					 
 					 if(SUCCESS.equals(retMap.get("returnCode"))){
 						 updatePushParams.addAttr("status", BorrowConstant.PushStatus.PUSH_SUCCESS);
 						 successTotal++;
@@ -87,7 +95,7 @@ public class FumiTaskJob {
 					 ServiceKey.doCall(updatePushParams, ServiceKey.Key_data);
 
 				} catch (Exception e) {
-					log.error("福米请求失败,返回信息={}",retMap,e);
+					log.error("福米更新转单数据失败,返回信息={}",retMap,e);
 					continue;
 				}
 				

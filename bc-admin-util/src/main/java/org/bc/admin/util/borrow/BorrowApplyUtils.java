@@ -1,5 +1,6 @@
 package org.bc.admin.util.borrow;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.bc.admin.util.constant.BorrowConstant;
@@ -86,12 +87,13 @@ public class BorrowApplyUtils {
 			return null;
 	}
 	
-	public static int insertPushRecord(Object applyId,Object telephone) {
+	public static int insertPushRecord(Object applyId,Object telephone,Date applyTime) {
 		int insertSize = 0;
 		try{
 			AppParam insertParam = new AppParam("applyPushRecordService","insert");
 			insertParam.addAttr("telephone", telephone);
 			insertParam.addAttr("applyId", applyId);
+			insertParam.addAttr("applyTime", applyTime);
 			AppResult result = ServiceKey.doCall(insertParam, ServiceKey.Key_data);
 			
 			insertSize = result.getInsertCount();

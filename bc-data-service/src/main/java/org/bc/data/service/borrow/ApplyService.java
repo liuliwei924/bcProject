@@ -135,7 +135,7 @@ public class ApplyService extends ApiBaseServiceImpl {
 			
 			if(result.isSuccess() 
 					&& !StringUtil.getString(params.getAttr("applyName")).contains("测试")){
-				BorrowApplyUtils.insertPushRecord(params.getAttr("applyId"),telephone);
+				BorrowApplyUtils.insertPushRecord(params.getAttr("applyId"),telephone,new Date());
 			}
 		}
 		
