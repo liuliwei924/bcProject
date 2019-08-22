@@ -217,7 +217,7 @@ public class FumiTaskJob {
 					bean.setHaveName("贷款车");
 				}else if(dataInt ==4){
 					bean.setIsHave(0);
-					bean.setHaveName("全款车）");
+					bean.setHaveName("全款车");
 				}else if(dataInt>=5){
 					bean.setIsHave(0);
 					bean.setHaveName("其他房");
