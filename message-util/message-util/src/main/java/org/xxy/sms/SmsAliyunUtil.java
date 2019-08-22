@@ -75,12 +75,15 @@ public class SmsAliyunUtil {
 	
 	public static void main(String[] args) {
 		SmsConfig smsConfig = new SmsConfig();
-		smsConfig.setAppkey("<accessKeyId>");
-		smsConfig.setAppid("<secret>");
-		smsConfig.setSignName("恒盈");
-		smsConfig.setTempId("SMS_171090204");
+		//smsConfig.setAppkey("<accessKeyId>");
+	   //smsConfig.setAppid("<secret>");
 		
-		AppResult result = sendSms("18670787211", "123321", smsConfig);
+		smsConfig.setAppkey("");
+		smsConfig.setAppid("");
+		smsConfig.setSignName("恒盈");
+		smsConfig.setTempId("SMS_171045230");
+		
+		AppResult result = sendSms("18670787211", "124321", smsConfig);
 		
 		System.out.println(result.toJson());
 

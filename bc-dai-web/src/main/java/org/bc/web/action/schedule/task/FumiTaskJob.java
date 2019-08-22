@@ -124,6 +124,13 @@ public class FumiTaskJob {
 			AppParam updateParam = new AppParam("applyPushRecordService","update");
 			
 			for(Map<String,Object> dataMap : result.getRows()){
+				
+				if(StringUtils.isEmpty(dataMap.get("telephone")) || 
+						StringUtils.isEmpty(dataMap.get("applyName")) ||
+						StringUtils.isEmpty(dataMap.get("applyAmount"))){
+					continue;
+				}
+				
 				updateParam.addAttr("pushId", dataMap.get("pushId"));
 				updateParam.addAttr("fromStatus", BorrowConstant.PushStatus.NO_PUSH+"");
 				updateParam.addAttr("status", BorrowConstant.PushStatus.PUSH_ING);
