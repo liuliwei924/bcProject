@@ -89,16 +89,10 @@ public class ValidUtils {
 	 */
 	public static Boolean validateRandomNo(String clientNum,String cacheKey,String phone){
 		String key = SysParamsUtil.getParamByKey(cacheKey, true) + phone;
-		boolean sendStatus = SysParamsUtil.getBoleanByKey("sendStatus", false);
-		//不验证短信验证码
-		if (!sendStatus) {
-			if("4321".equals(clientNum)){
-				return true; 
-			}
-			return false;
-		}
+	
 		String random = (String) RedisUtils.getRedisService().get(key);
 		if(random != null && random.equals(clientNum)){
+			RedisUtils.getRedisService().del(key);
 			return true;
 		}
 		return false;
