@@ -278,8 +278,8 @@ public class FumiTaskJob {
 	
 	public static int changeDataType0(Object data){
 		if(!StringUtils.isEmpty(data) && 1 == Integer.parseInt(data.toString()))
-			return 1;
-		else
 			return 0;
+		else
+			return 1;
 	}
 }
